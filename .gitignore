@@ -9,6 +9,7 @@
 # build outputs / temp
 /build
 /dist
+*.tsbuildinfo
 
 # environment variables & API keys
 .env
@@ -39,3 +40,5 @@ android/local.properties
 android/captures/
 android/.externalNativeBuild/
 android/.cxx/
+
+.vercel

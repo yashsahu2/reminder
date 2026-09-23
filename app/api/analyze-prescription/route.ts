@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenAI, createPartFromBase64 } from '@google/genai';
-import { PrescriptionAnalysisResult } from '@/types/medication';
+import { PrescriptionAnalysisResult, TimeBucket } from '@/types/medication';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -228,8 +228,8 @@ export async function POST(req: NextRequest) {
         .filter((m) => m && typeof m === 'object' && (m.name || m.genericName))
         .map((m) => {
           const rawTiming = Array.isArray(m.timing) ? m.timing : [];
-          const timing = rawTiming.filter((t: string) => validBuckets.has(t));
-          const safeTiming = timing.length > 0 ? timing : ['morning'];
+          const timing = rawTiming.filter((t: string): t is TimeBucket => validBuckets.has(t));
+          const safeTiming: TimeBucket[] = timing.length > 0 ? timing : ['morning'];
 
           // Default time mapping if not provided or empty
           const timeMap: Record<string, string> = {
